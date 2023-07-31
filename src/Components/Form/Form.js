@@ -9,6 +9,8 @@ export default function Form({marcas}) {
     const [anosData, setAnosData] = useState([])
     const [carroData, setCarroData] = useState('')
     const [valorCarro, setValorCarro] = useState('')
+    const [error, setError] = useState(false)
+    const [isSubmitted, setIsSubmitted] = useState(false)
 
 
     const changeBrand = (value) => {
@@ -16,38 +18,76 @@ export default function Form({marcas}) {
             method:'GET'
         })
         .then(response => response.json())
-        .then(data => setModelosData(data.modelos))
+        .then(data => {
+            if(data === '' || data === undefined) {
+                setError(true)
+            } else {
+                setModelosData(data.modelos)
+                setError(false)
+            }
+        })
         .catch(err => console.log(err))
 
+        //reseta ao alterar
         setIdMarca(value)
-        setValorCarro('')//reseta o valor do carro mostrado
+        setValorCarro('')
+        setIsSubmitted(false)
+        setModelosData('')
+        setAnosData('')
+        setCarroData('')
+        console.log(valorCarro)
     }
 
     const changeModel = (value) => {
-        fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${idMarca}/modelos/${value}/anos`, {
+        if (!error) {
+            fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${idMarca}/modelos/${value}/anos`, {
             method:'GET'
-        })
-        .then(response => response.json())
-        .then(data => setAnosData(data))
-        .catch(err => console.log(err))
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data === '' || data === undefined) {
+                    setError(true)
+                } else {
+                    setAnosData(data)
+                    setError(false)
+                }
+            })
+            .catch(err => console.log(err))
+            
+            setIdModelo(value)
+            setValorCarro('')
+            setIsSubmitted(false)
+            setAnosData('')
+            setCarroData('')
+        }
         
-        setIdModelo(value)
-        setValorCarro('')
     }
 
     const changeYear = (value) => {
-        fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${idMarca}/modelos/${idModelo}/anos/${value}`, {
+        if (!error) {
+            fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${idMarca}/modelos/${idModelo}/anos/${value}`, {
             method:'GET'
-        })
-        .then(response => response.json())
-        .then(data => {console.log(typeof(data)); setCarroData(data)})
-        .catch(err => console.log(err))
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data === '' || data === undefined) {
+                    setError(true)
+                } else {
+                    setCarroData(data)
+                    setError(false)
+                }
+            })
+            .catch(err => console.log(err))
 
-        setValorCarro('')
+            setValorCarro('')
+            setIsSubmitted(false)
+            setCarroData('')
+        }
     }
 
     const handleClick = () => {
         setValorCarro(carroData.Valor)
+        setIsSubmitted(true)
     }
 
     return (
@@ -67,7 +107,7 @@ export default function Form({marcas}) {
                     <label htmlFor="modelo">Modelo</label>
                     <select id="modelo" onChange={(event) => changeModel(event.target.value)}>
                         <option value=''>Modelo do carro</option>
-                        {modelosData.map((data, index) => (
+                        {modelosData === '' ? '': modelosData.map((data, index) => (
                             <option key={index} value={data.codigo}>{data.nome}</option>
                             ))}
                     </select>
@@ -76,16 +116,17 @@ export default function Form({marcas}) {
                     <label htmlFor="ano">Ano</label>
                     <select id="ano" onChange={(event) => changeYear(event.target.value)}>
                         <option value=''>Ano do carro</option>
-                        {anosData.map((data, index) => (
+                        {anosData === ''? '': anosData.map((data, index) => (
                             <option key={index} value={data.codigo}>{data.nome}</option>
                             ))}
                     </select>
                 </div>
                 <button onClick={handleClick}>Buscar</button>
             </div>
-            <div className="results">
-                <p style={{display: valorCarro === ''? 'none':'block'}}>Preço:</p>
-                <p>{valorCarro}</p>
+            <div className="results" style={{display: isSubmitted? 'block':'none'}}>
+                <p>{(valorCarro === '' || valorCarro === undefined)? '': 'Preço:'}</p>
+                <p>{(valorCarro === '' || valorCarro === undefined)? !isSubmitted? '' : 'Carro não encontrado / Campos não preenchidos.': valorCarro}</p>
+                <p>{error? 'Não possível encontrar este veículo!': ''}</p>
             </div>
         </div>
     )
