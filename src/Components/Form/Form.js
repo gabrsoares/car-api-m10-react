@@ -32,6 +32,7 @@ export default function Form({marcas}) {
         .catch(err => console.log(err))
         
         setIdModelo(value)
+        setValorCarro('')
     }
 
     const changeYear = (value) => {
@@ -39,8 +40,10 @@ export default function Form({marcas}) {
             method:'GET'
         })
         .then(response => response.json())
-        .then(data => setCarroData(data))
+        .then(data => {console.log(typeof(data)); setCarroData(data)})
         .catch(err => console.log(err))
+
+        setValorCarro('')
     }
 
     const handleClick = () => {
@@ -81,6 +84,7 @@ export default function Form({marcas}) {
                 <button onClick={handleClick}>Buscar</button>
             </div>
             <div className="results">
+                <p style={{display: valorCarro === ''? 'none':'block'}}>Preço:</p>
                 <p>{valorCarro}</p>
             </div>
         </div>

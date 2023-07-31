@@ -1,3 +1,86 @@
+#form {
+    width: 90%;
+    margin: 0 auto;
+}
+
 .data {
-    margin: 2px solid #000;
+    border: 2px solid #000;
+    box-sizing: border-box;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow:  6px 8px 15px 3px rgba(0, 0, 0, 0.18);
+    -webkit-box-shadow:  6px 8px 15px 3px rgba(0, 0, 0, 0.18);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: .75rem;
+}
+
+label {
+    margin-bottom: .5rem;
+    font-weight: 600;
+}
+
+select {
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    font-weight: 400;
+    border-radius: 5px;
+}
+
+#modelo {
+    width: 90%;
+}
+
+button {
+    margin: 1rem 0;
+    width: 100px;
+    height: 30px;
+    font-size: 1.4rem;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #51E6D5;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.results {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+@media screen and (min-width: 425px) {
+    select {
+        width: 150px;
+    }
+
+    #modelo {
+        width: 350px;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .data {
+        width: 500px;
+        margin: 0 auto;
+    }
+    select {
+        width: 200px;
+        font-size: 1rem;
+    }
+
+    #modelo {
+        width: 400px;
+    }
+
+    button {
+        width: 150px;
+        height: 40px;
+        font-size: 1.4rem;
+    }
 }
