@@ -14,6 +14,14 @@ export default function Form({marcas}) {
 
 
     const changeBrand = (value) => {
+        //reseta ao alterar
+        setIdMarca(value)
+        setIsSubmitted(false)
+        setValorCarro('')
+        setModelosData('')
+        setAnosData('')
+        setCarroData('')
+
         fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${value}/modelos`, {
             method:'GET'
         })
@@ -27,15 +35,6 @@ export default function Form({marcas}) {
             }
         })
         .catch(err => console.log(err))
-
-        //reseta ao alterar
-        setIdMarca(value)
-        setValorCarro('')
-        setIsSubmitted(false)
-        setModelosData('')
-        setAnosData('')
-        setCarroData('')
-        console.log(valorCarro)
     }
 
     const changeModel = (value) => {
@@ -55,10 +54,7 @@ export default function Form({marcas}) {
             .catch(err => console.log(err))
             
             setIdModelo(value)
-            setValorCarro('')
             setIsSubmitted(false)
-            setAnosData('')
-            setCarroData('')
         }
         
     }
@@ -79,9 +75,7 @@ export default function Form({marcas}) {
             })
             .catch(err => console.log(err))
 
-            setValorCarro('')
             setIsSubmitted(false)
-            setCarroData('')
         }
     }
 
@@ -124,6 +118,8 @@ export default function Form({marcas}) {
                 <button onClick={handleClick}>Buscar</button>
             </div>
             <div className="results" style={{display: isSubmitted? 'block':'none'}}>
+                <p>{(valorCarro === '' || valorCarro === undefined)? '': (carroData.Marca + ' ' + carroData.Modelo) }</p>
+                <p>{(valorCarro === '' || valorCarro === undefined)? '': 'Ano: '+ carroData.AnoModelo }</p>
                 <p>{(valorCarro === '' || valorCarro === undefined)? '': 'Preço:'}</p>
                 <p>{(valorCarro === '' || valorCarro === undefined)? !isSubmitted? '' : 'Carro não encontrado / Campos não preenchidos.': valorCarro}</p>
                 <p>{error? 'Não possível encontrar este veículo!': ''}</p>
